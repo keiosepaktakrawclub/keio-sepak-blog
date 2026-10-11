@@ -39,6 +39,7 @@ layout: base.njk
 
 <section class="wrap sec">
   <div class="sec-hd"><h2>代別ページ</h2></div>
+  {% if generations.length %}
   <div class="gens">
     {% for g in generations %}
     <a class="gen" href="/gen/{{ g.gradYear }}/">
@@ -48,4 +49,5 @@ layout: base.njk
     </a>
     {% endfor %}
   </div>
+  {% else %}<p class="empty">まだ代が登録されていません。編集ページの「メンバー」から登録してください。</p>{% endif %}
 </section>

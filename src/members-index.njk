@@ -7,6 +7,7 @@ permalink: /members/
   <p class="kicker">MEMBERS</p>
   <h1>メンバー</h1>
 </section>
+{% if not generations.length %}<section class="wrap sec"><p class="empty">まだメンバーが登録されていません。</p></section>{% endif %}
 {% for g in generations %}
 <section class="wrap sec">
   <div class="sec-hd"><h2>{{ g.gen }}代目 <span class="dim">{{ g.label }}</span></h2></div>

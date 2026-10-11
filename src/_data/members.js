@@ -4,6 +4,7 @@ import path from "node:path";
 // src/content/members/*.json を読み込み、ファイル名をIDとして配列にする
 export default function () {
   const dir = "src/content/members";
+  if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
     .filter((f) => f.endsWith(".json"))

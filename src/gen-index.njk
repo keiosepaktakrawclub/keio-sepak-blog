@@ -9,6 +9,7 @@ permalink: /gen/
   <p class="lead">卒業年度ごとの代です。1代目＝27卒。</p>
 </section>
 <section class="wrap sec">
+  {% if generations.length %}
   <div class="gens">
     {% for g in generations %}
     <a class="gen" href="/gen/{{ g.gradYear }}/">
@@ -18,4 +19,5 @@ permalink: /gen/
     </a>
     {% endfor %}
   </div>
+  {% else %}<p class="empty">まだ代が登録されていません。</p>{% endif %}
 </section>
