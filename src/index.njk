@@ -1,0 +1,51 @@
+---
+layout: base.njk
+---
+{% set rs = relay.order | relayState(collections.posts) %}
+{% set cur = members | member(rs.current) %}
+{% set nxt = members | member(rs.next) %}
+<section class="hero">
+  <div class="wrap hero-in">
+    <p class="kicker">KEIO SEPAKTAKRAW CLUB</p>
+    <h1>バトンをつなぐ、<br>空中戦の記録。</h1>
+    <p class="lead">慶應セパタクロークラブのメンバーが、ひとりずつ順番に書きつなぐリレーブログです。</p>
+  </div>
+</section>
+
+{% if cur %}
+<section class="wrap baton">
+  <div class="baton-now">
+    <span class="kicker">NOW ON BATON</span>
+    <p class="baton-name"><a href="/members/{{ cur.id }}/">{{ cur.name }}</a></p>
+    <p class="baton-sub">{{ cur.gradYear | gen }}代目・{{ cur.gradYear | sotsu }}{% if cur.role %}・{{ cur.role }}{% endif %}</p>
+  </div>
+  <div class="baton-arrow" aria-hidden="true">→</div>
+  <div class="baton-next">
+    <span class="kicker">NEXT</span>
+    <p>{{ nxt.name if nxt else "未定" }}</p>
+  </div>
+  <a class="baton-link" href="/relay/">リレー順を見る</a>
+</section>
+{% endif %}
+
+<section class="wrap sec">
+  <div class="sec-hd"><h2>最新の記事</h2></div>
+  {% if collections.posts.length %}
+  <div class="grid">
+    {% for post in collections.posts | limit(6) %}{% include "card.njk" %}{% endfor %}
+  </div>
+  {% else %}<p class="empty">まだ記事がありません。最初の走者を待っています。</p>{% endif %}
+</section>
+
+<section class="wrap sec">
+  <div class="sec-hd"><h2>代別ページ</h2></div>
+  <div class="gens">
+    {% for g in generations %}
+    <a class="gen" href="/gen/{{ g.gradYear }}/">
+      <span class="gen-num">{{ g.gen }}<small>代目</small></span>
+      <span class="gen-lb">{{ g.label }}</span>
+      <span class="gen-ct">{{ (members | membersOf(g.gradYear)).length }}人 ・ {{ (collections.posts | byGen(g.gradYear, members)).length }}記事</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>

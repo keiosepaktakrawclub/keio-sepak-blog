@@ -1,0 +1,29 @@
+---
+layout: base.njk
+pagination:
+  data: generations
+  size: 1
+  alias: g
+permalink: "/gen/{{ g.gradYear }}/"
+eleventyComputed:
+  title: "{{ g.gen }}代目（{{ g.label }}）"
+---
+{% set gp = collections.posts | byGen(g.gradYear, members) %}
+<section class="wrap sec page-hd">
+  <p class="kicker">GENERATION {{ g.gen }}</p>
+  <h1>{{ g.gen }}代目 <span class="dim">{{ g.label }}</span></h1>
+</section>
+<section class="wrap sec">
+  <div class="sec-hd"><h2>メンバー</h2></div>
+  <ul class="people">
+    {% for m in members | membersOf(g.gradYear) %}
+    <li><a href="/members/{{ m.id }}/"><span class="avatar">{{ m.name | first }}</span><span><b>{{ m.name }}</b>{% if m.role %}<small>{{ m.role }}</small>{% endif %}</span></a></li>
+    {% endfor %}
+  </ul>
+</section>
+<section class="wrap sec">
+  <div class="sec-hd"><h2>この代の記事</h2></div>
+  {% if gp.length %}
+  <div class="grid">{% for post in gp %}{% include "card.njk" %}{% endfor %}</div>
+  {% else %}<p class="empty">まだ記事がありません。</p>{% endif %}
+</section>

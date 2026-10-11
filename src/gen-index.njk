@@ -1,0 +1,21 @@
+---
+layout: base.njk
+title: 代別ページ
+permalink: /gen/
+---
+<section class="wrap sec page-hd">
+  <p class="kicker">GENERATIONS</p>
+  <h1>代別ページ</h1>
+  <p class="lead">卒業年度ごとの代です。1代目＝27卒。</p>
+</section>
+<section class="wrap sec">
+  <div class="gens">
+    {% for g in generations %}
+    <a class="gen" href="/gen/{{ g.gradYear }}/">
+      <span class="gen-num">{{ g.gen }}<small>代目</small></span>
+      <span class="gen-lb">{{ g.label }}</span>
+      <span class="gen-ct">{{ (members | membersOf(g.gradYear)).length }}人 ・ {{ (collections.posts | byGen(g.gradYear, members)).length }}記事</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>

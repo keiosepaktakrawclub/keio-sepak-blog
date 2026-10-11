@@ -1,0 +1,83 @@
+# ===== 管理画面の設定 =====
+# repo は「アカウント名/リポジトリ名」
+backend:
+  name: github
+  repo: keiosepaktakrawclub/keio-sepak-blog
+  branch: main
+  # 「GitHubでログイン」ボタンを使う場合だけ、認証サーバーのURLを入れる（手順書参照）
+  # base_url: https://sveltia-cms-auth.xxxx.workers.dev
+
+locale: ja
+media_folder: src/images/uploads
+public_folder: /images/uploads
+
+collections:
+  # ---------- 記事 ----------
+  - name: posts
+    label: 記事
+    label_singular: 記事
+    folder: src/posts
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{fields.slug_en}}"
+    summary: "{{date}} ｜ {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: タイトル, name: title, widget: string }
+      - { label: URL用の英字（例 summer-camp）, name: slug_en, widget: string, pattern: ['^[a-z0-9-]+$', '半角英小文字・数字・ハイフンのみ'] }
+      - { label: 日付, name: date, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - label: 書いた人
+        name: author
+        widget: relation
+        collection: members
+        value_field: "{{slug}}"
+        search_fields: [name]
+        display_fields: ["{{name}}（{{gradYear}}年卒）"]
+      - { label: サムネイル画像（任意）, name: thumbnail, widget: image, required: false }
+      - label: 次の走者（空欄ならリレー順どおり）
+        name: nextRunner
+        widget: relation
+        collection: members
+        value_field: "{{slug}}"
+        search_fields: [name]
+        display_fields: ["{{name}}"]
+        required: false
+      - { label: 本文, name: body, widget: markdown }
+
+  # ---------- メンバー ----------
+  - name: members
+    label: メンバー
+    label_singular: メンバー
+    folder: src/content/members
+    extension: json
+    format: json
+    create: true
+    identifier_field: name
+    slug: "{{fields.id}}"
+    summary: "{{gradYear}}年卒 ｜ {{name}}"
+    fields:
+      - { label: ID（ローマ字・例 sato-kenta。後から変えない）, name: id, widget: string, pattern: ['^[a-z0-9-]+$', '半角英小文字・数字・ハイフンのみ'] }
+      - { label: 名前, name: name, widget: string }
+      - { label: 卒業年度（西暦。27卒なら2027）, name: gradYear, widget: number, value_type: int, min: 2027 }
+      - { label: 役職（任意）, name: role, widget: string, required: false }
+      - { label: ひとこと紹介（任意）, name: bio, widget: text, required: false }
+
+  # ---------- リレー順 ----------
+  - name: settings
+    label: リレー順
+    files:
+      - name: relay
+        label: リレーの順番
+        file: src/content/relay.json
+        format: json
+        fields:
+          - label: 順番（上から順にバトンが回ります。ドラッグで並べ替え）
+            name: order
+            widget: list
+            field:
+              label: メンバー
+              name: member
+              widget: relation
+              collection: members
+              value_field: "{{slug}}"
+              search_fields: [name]
+              display_fields: ["{{name}}（{{gradYear}}年卒）"]

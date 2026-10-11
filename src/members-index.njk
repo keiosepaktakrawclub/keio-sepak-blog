@@ -1,0 +1,19 @@
+---
+layout: base.njk
+title: メンバー
+permalink: /members/
+---
+<section class="wrap sec page-hd">
+  <p class="kicker">MEMBERS</p>
+  <h1>メンバー</h1>
+</section>
+{% for g in generations %}
+<section class="wrap sec">
+  <div class="sec-hd"><h2>{{ g.gen }}代目 <span class="dim">{{ g.label }}</span></h2></div>
+  <ul class="people">
+    {% for m in members | membersOf(g.gradYear) %}
+    <li><a href="/members/{{ m.id }}/"><span class="avatar">{{ m.name | first }}</span><span><b>{{ m.name }}</b>{% if m.role %}<small>{{ m.role }}</small>{% endif %}</span></a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}

@@ -1,0 +1,25 @@
+---
+layout: base.njk
+pagination:
+  data: members
+  size: 1
+  alias: m
+permalink: "/members/{{ m.id }}/"
+eleventyComputed:
+  title: "{{ m.name }}"
+---
+{% set mp = collections.posts | byAuthor(m.id) %}
+<section class="wrap sec profile">
+  <span class="avatar avatar--lg">{{ m.name | first }}</span>
+  <div>
+    <p class="kicker"><a href="/gen/{{ m.gradYear }}/">{{ m.gradYear | gen }}代目・{{ m.gradYear | sotsu }}</a>{% if m.role %} ／ {{ m.role }}{% endif %}</p>
+    <h1>{{ m.name }}</h1>
+    {% if m.bio %}<p class="lead">{{ m.bio }}</p>{% endif %}
+  </div>
+</section>
+<section class="wrap sec">
+  <div class="sec-hd"><h2>書いた記事</h2></div>
+  {% if mp.length %}
+  <div class="grid">{% for post in mp %}{% include "card.njk" %}{% endfor %}</div>
+  {% else %}<p class="empty">まだ記事がありません。</p>{% endif %}
+</section>

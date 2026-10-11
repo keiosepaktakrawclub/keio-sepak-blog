@@ -1,0 +1,25 @@
+---
+layout: base.njk
+---
+{% set au = members | member(author) %}
+<article class="wrap post">
+  <header class="post-hd">
+    <div class="meta">
+      {% if au %}<a class="chip" href="/gen/{{ au.gradYear }}/">{{ au.gradYear | gen }}代目（{{ au.gradYear | sotsu }}）</a>{% endif %}
+      <time datetime="{{ page.date | isoDate }}">{{ page.date | date }}</time>
+    </div>
+    <h1>{{ title }}</h1>
+    {% if au %}<a class="author" href="/members/{{ au.id }}/"><span class="avatar">{{ au.name | first }}</span>{{ au.name }}{% if au.role %}<small>{{ au.role }}</small>{% endif %}</a>{% endif %}
+  </header>
+  {% if thumbnail %}<img class="post-thumb" src="{{ thumbnail }}" alt="">{% endif %}
+  <div class="prose">{{ content | safe }}</div>
+  {% set idx = relay.order.indexOf(author) %}
+  {% set nxId = nextRunner or (relay.order[(idx + 1) % relay.order.length] if idx >= 0 else "") %}
+  {% set nx = members | member(nxId) %}
+  {% if nx %}
+  <aside class="baton-pass">
+    <span class="kicker">BATON PASS</span>
+    <p>次のバトンは <a href="/members/{{ nx.id }}/">{{ nx.name }}</a>（{{ nx.gradYear | sotsu }}）へ！</p>
+  </aside>
+  {% endif %}
+</article>
